@@ -1,5 +1,6 @@
 let gulp = require('gulp');                 //npm install gulp --save-dev
 let uglify = require('gulp-uglify');        //npm install gulp-uglify --save-dev. Not ES6!
+let livereload = require('gulp-livereload');
 
 
 //file paths
@@ -17,7 +18,8 @@ gulp.task('scripts', ()=>{                                  //command = gulp scr
     console.log('starting scripts task!');
     return gulp.src(scripts_PATH)                  //gulp.src() makes gulp know about files
                 .pipe(uglify())                             //.pipe() makes file go different steps
-                .pipe(gulp.dest('public/dist'));            //gulp.dest() sets the resultant file on the destination provided               
+                .pipe(gulp.dest('public/dist'))            //gulp.dest() sets the resultant file on the destination provided               
+                .pipe(livereload());
 });
 
 
@@ -36,5 +38,6 @@ gulp.task('default', ()=>{                          //as default, run only calli
 gulp.task('watch', ()=>{
     console.log('Starting watch task');
     require('./server.js');
+    livereload.listen();
     gulp.watch(scripts_PATH, gulp.series('scripts'));
 });
