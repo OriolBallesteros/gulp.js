@@ -8,6 +8,9 @@ let plumber = require('gulp-plumber');          //error handler -- prevents the 
 let sourcemaps = require('gulp-sourcemaps');    //makes it easy to debug. (Even we are concatenating and minifying files and everything, once we us the inspector, everything is displayed to us in a nice easy way)
 let babel = require('gulp-babel');              //npm install gulp-babel babel-preset-2015   
 
+let del = require('del');
+
+
 //Image compression
 let imagemin = require('gulp-imagemin');
 let imageminPngquant = require('imagemin-pngquant');
@@ -19,6 +22,7 @@ let dist_PATH = 'public/dist';
 let scripts_PATH = 'public/scripts/**/*.js';
 let css_PATH = 'public/css/**/*.css';
 let images_PATH = 'public/images/**/*.{png,jpeg,jpg,svg,gif}';
+
 
 
 //Styles
@@ -38,6 +42,7 @@ gulp.task('styles', ()=>{                       //command = gulp styles
                 .pipe(gulp.dest(dist_PATH))         //put the result file in this path
                 .pipe(livereload());                //live reload the page; (due to the HTML is using this combined.css)
 });
+
 
 
 //Scripts
@@ -61,6 +66,7 @@ gulp.task('scripts', ()=>{                                  //command = gulp scr
 });
 
 
+
 //Images
 gulp.task('images', ()=>{                   
     console.log('starting images task!');
@@ -79,10 +85,22 @@ gulp.task('images', ()=>{
 });
 
 
-gulp.task('default', gulp.parallel( 'images', 'styles', 'scripts'), (done)=> {       //as default, it's called only with gulp command
+
+//Cleaning
+gulp.task('clean', ()=>{
+    console.log('Starting Clean Task');
+    return del.sync([
+        dist_PATH
+    ]);
+});
+
+
+//Default
+gulp.task('default', gulp.parallel('clean', 'images', 'styles', 'scripts'), (done)=> {       //as default, it's called only with gulp command
     console.log('Starting default task');
     done();
   });
+
 
 
 //watch = run a gulp task automatically every time a specified file is changed
