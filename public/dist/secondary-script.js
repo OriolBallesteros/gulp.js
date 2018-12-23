@@ -1,0 +1,1 @@
+for(var max=10,z=0;z<max;z++)console.log(z);

@@ -1,0 +1,1 @@
+var name="Eric Border";document.write("Hello there, I'm "+name);
