@@ -4,6 +4,7 @@ let livereload = require('gulp-livereload');
 let concat = require('gulp-concat');
 let minifyCSS = require('gulp-minify-css');
 let autoprefixer = require('gulp-autoprefixer');
+let plumber = require('gulp-plumber');         //error handler -- prevents the task to crash when it finds an error
 
 
 //file paths
@@ -16,6 +17,11 @@ let css_PATH = 'public/css/**/*.css';
 gulp.task('styles', ()=>{                       //command = gulp styles
     console.log('starting styles task!');
     return gulp.src(['public/css/reset.css', css_PATH])         //using arrays to specify files, and the ORDER of them              //take those files in this path
+                .pipe(plumber((err)=>{
+                    console.log('Styles task Error');
+                    console.log(err);
+                    this.emit('end');
+                }))
                 .pipe(autoprefixer())               //one of the most useful gulp tasks
                 .pipe(concat('combined.css'))       //apply concat() plugin and name the result combined.css
                 .pipe(minifyCSS())                  //minifiying it
@@ -28,8 +34,8 @@ gulp.task('styles', ()=>{                       //command = gulp styles
 gulp.task('scripts', ()=>{                                  //command = gulp scripts
     console.log('starting scripts task!');
     return gulp.src(scripts_PATH)                  //gulp.src() makes gulp know about files
-                .pipe(uglify())                             //.pipe() makes file go different steps
-                .pipe(gulp.dest(dist_PATH))            //gulp.dest() sets the resultant file on the destination provided               
+                .pipe(uglify())                    //.pipe() makes file go different steps
+                .pipe(gulp.dest(dist_PATH))        //gulp.dest() sets the resultant file on the destination provided               
                 .pipe(livereload());
 });
 
