@@ -3,16 +3,20 @@ let uglify = require('gulp-uglify');
 let livereload = require('gulp-livereload');
 let concat = require('gulp-concat');
 let minifyCSS = require('gulp-minify-css');
+let autoprefixer = require('gulp-autoprefixer');
+
 
 //file paths
 let dist_PATH = 'public/dist';
 let scripts_PATH = 'public/scripts/**/*.js';
 let css_PATH = 'public/css/**/*.css';
 
+
 //Styles
 gulp.task('styles', ()=>{                       //command = gulp styles
     console.log('starting styles task!');
     return gulp.src(['public/css/reset.css', css_PATH])         //using arrays to specify files, and the ORDER of them              //take those files in this path
+                .pipe(autoprefixer())               //one of the most useful gulp tasks
                 .pipe(concat('combined.css'))       //apply concat() plugin and name the result combined.css
                 .pipe(minifyCSS())                  //minifiying it
                 .pipe(gulp.dest(dist_PATH))         //put the result file in this path
