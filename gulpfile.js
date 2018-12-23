@@ -4,14 +4,21 @@ let livereload = require('gulp-livereload');
 let concat = require('gulp-concat');
 let minifyCSS = require('gulp-minify-css');
 let autoprefixer = require('gulp-autoprefixer');
-let plumber = require('gulp-plumber');         //error handler -- prevents the task to crash when it finds an error
+let plumber = require('gulp-plumber');          //error handler -- prevents the task to crash when it finds an error
 let sourcemaps = require('gulp-sourcemaps');    //makes it easy to debug. (Even we are concatenating and minifying files and everything, once we us the inspector, everything is displayed to us in a nice easy way)
 let babel = require('gulp-babel');              //npm install gulp-babel babel-preset-2015   
+
+//Image compression
+let imagemin = require('gulp-imagemin');
+let imageminPngquant = require('imagemin-pngquant');
+let imageminJpegRecompress = require('imagemin-jpeg-recompress');
+
 
 //file paths
 let dist_PATH = 'public/dist';
 let scripts_PATH = 'public/scripts/**/*.js';
 let css_PATH = 'public/css/**/*.css';
+let images_PATH = 'public/images/**/*.{png,jpeg,jpg,svg,gif}';
 
 
 //Styles
@@ -57,6 +64,18 @@ gulp.task('scripts', ()=>{                                  //command = gulp scr
 //Images
 gulp.task('images', ()=>{                   
     console.log('starting images task!');
+    return gulp.src(images_PATH)
+                .pipe(imagemin(                    //image compression
+                    [
+                        imagemin.gifsicle(),
+                        imagemin.jpegtran(),
+                        imagemin.optipng(),
+                        imagemin.svgo(),
+                        imageminPngquant(),
+                        imageminJpegRecompress()
+                    ]
+                ))
+                .pipe(gulp.dest(dist_PATH + '/images'));
 });
 
 
