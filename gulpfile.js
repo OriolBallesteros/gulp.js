@@ -5,6 +5,7 @@ let concat = require('gulp-concat');
 let minifyCSS = require('gulp-minify-css');
 let autoprefixer = require('gulp-autoprefixer');
 let plumber = require('gulp-plumber');         //error handler -- prevents the task to crash when it finds an error
+let sourcemaps = require('gulp-sourcemaps');    //makes it easy to debug. (Even we are concatenating and minifying files and everything, once we us the inspector, everything is displayed to us in a nice easy way)
 
 
 //file paths
@@ -22,9 +23,11 @@ gulp.task('styles', ()=>{                       //command = gulp styles
                     console.log(err);
                     this.emit('end');
                 }))
+                .pipe(sourcemaps.init())
                 .pipe(autoprefixer())               //one of the most useful gulp tasks
                 .pipe(concat('combined.css'))       //apply concat() plugin and name the result combined.css
                 .pipe(minifyCSS())                  //minifiying it
+                .pipe(sourcemaps.write())
                 .pipe(gulp.dest(dist_PATH))         //put the result file in this path
                 .pipe(livereload());                //live reload the page; (due to the HTML is using this combined.css)
 });
