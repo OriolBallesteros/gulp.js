@@ -6,7 +6,7 @@ let minifyCSS = require('gulp-minify-css');
 let autoprefixer = require('gulp-autoprefixer');
 let plumber = require('gulp-plumber');          //error handler -- prevents the task to crash when it finds an error
 let sourcemaps = require('gulp-sourcemaps');    //makes it easy to debug. (Even we are concatenating and minifying files and everything, once we us the inspector, everything is displayed to us in a nice easy way)
-let babel = require('gulp-babel');              //npm install gulp-babel babel-preset-2015   
+let babel = require('gulp-babel');              
 
 let del = require('del');
 let zip = require('gulp-zip');
@@ -26,9 +26,9 @@ let images_PATH = 'public/images/**/*.{png,jpeg,jpg,svg,gif}';
 
 
 //Styles - CSS fyles
-gulp.task('styles', ()=>{                       //command = gulp styles
+gulp.task('styles', ()=>{                                       //command = gulp styles
     console.log('starting styles task!');
-    return gulp.src(['public/css/reset.css', css_PATH])         //using arrays to specify files, and the ORDER of them              //take those files in this path
+    return gulp.src(['public/css/reset.css', css_PATH])         //using arrays to specify files, and the ORDER of them              
                 .pipe(plumber((err)=>{
                     console.log('Styles task Error');
                     console.log(err);
@@ -48,7 +48,7 @@ gulp.task('styles', ()=>{                       //command = gulp styles
 //Scripts - JS files
 gulp.task('scripts', ()=>{                                  //command = gulp scripts
     console.log('starting scripts task!');
-    return gulp.src(scripts_PATH)                  //gulp.src() makes gulp know about files
+    return gulp.src(scripts_PATH)                           //gulp.src() makes gulp know about files
                 .pipe(plumber((err)=>{
                     console.log('Scripts Task Error');
                     console.log(err);
@@ -71,7 +71,7 @@ gulp.task('scripts', ()=>{                                  //command = gulp scr
 gulp.task('images', ()=>{                   
     console.log('starting images task!');
     return gulp.src(images_PATH)
-                .pipe(imagemin(                    //image compression
+                .pipe(imagemin(                    //image compression - up to 70% without losing quality
                     [
                         imagemin.gifsicle(),
                         imagemin.jpegtran(),

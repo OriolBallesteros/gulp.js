@@ -1,5 +1,4 @@
 //Dummy JS as example to work with on Gulp.js
-
 class Person {
     constructor(name) {
         this.name = name;
