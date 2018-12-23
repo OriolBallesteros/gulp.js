@@ -6,5 +6,5 @@ let server = new StaticServer({
 });
 
 server.start(()=>{
-    console.log(`Server started on port ${server.port}`)
+    console.log(`Server started on port ${server.port}`);
 });
