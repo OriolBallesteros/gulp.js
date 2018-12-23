@@ -6,7 +6,7 @@ let minifyCSS = require('gulp-minify-css');
 let autoprefixer = require('gulp-autoprefixer');
 let plumber = require('gulp-plumber');         //error handler -- prevents the task to crash when it finds an error
 let sourcemaps = require('gulp-sourcemaps');    //makes it easy to debug. (Even we are concatenating and minifying files and everything, once we us the inspector, everything is displayed to us in a nice easy way)
-
+let babel = require('gulp-babel');              //npm install gulp-babel babel-preset-2015   
 
 //file paths
 let dist_PATH = 'public/dist';
@@ -37,8 +37,18 @@ gulp.task('styles', ()=>{                       //command = gulp styles
 gulp.task('scripts', ()=>{                                  //command = gulp scripts
     console.log('starting scripts task!');
     return gulp.src(scripts_PATH)                  //gulp.src() makes gulp know about files
+                .pipe(plumber((err)=>{
+                    console.log('Scripts Task Error');
+                    console.log(err);
+                    this.emit('end');
+                }))
+                .pipe(sourcemaps.init())
+                .pipe(babel({
+                    presets: ['@babel/env']
+                }))
                 .pipe(uglify())                    //.pipe() makes file go different steps
                 .pipe(concat('scripts.js'))
+                .pipe(sourcemaps.write())
                 .pipe(gulp.dest(dist_PATH))        //gulp.dest() sets the resultant file on the destination provided               
                 .pipe(livereload());
 });
@@ -50,9 +60,10 @@ gulp.task('images', ()=>{
 });
 
 
-gulp.task('default', ()=>{                          //as default, run only calling gulp
-    console.log('starting default task');
-});
+gulp.task('default', gulp.parallel( 'images', 'styles', 'scripts'), (done)=> {       //as default, it's called only with gulp command
+    console.log('Starting default task');
+    done();
+  });
 
 
 //watch = run a gulp task automatically every time a specified file is changed
