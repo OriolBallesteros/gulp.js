@@ -38,6 +38,7 @@ gulp.task('scripts', ()=>{                                  //command = gulp scr
     console.log('starting scripts task!');
     return gulp.src(scripts_PATH)                  //gulp.src() makes gulp know about files
                 .pipe(uglify())                    //.pipe() makes file go different steps
+                .pipe(concat('scripts.js'))
                 .pipe(gulp.dest(dist_PATH))        //gulp.dest() sets the resultant file on the destination provided               
                 .pipe(livereload());
 });
