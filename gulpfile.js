@@ -9,7 +9,7 @@ let sourcemaps = require('gulp-sourcemaps');    //makes it easy to debug. (Even 
 let babel = require('gulp-babel');              //npm install gulp-babel babel-preset-2015   
 
 let del = require('del');
-
+let zip = require('gulp-zip');
 
 //Image compression
 let imagemin = require('gulp-imagemin');
@@ -17,7 +17,7 @@ let imageminPngquant = require('imagemin-pngquant');
 let imageminJpegRecompress = require('imagemin-jpeg-recompress');
 
 
-//file paths
+//files paths
 let dist_PATH = 'public/dist';
 let scripts_PATH = 'public/scripts/**/*.js';
 let css_PATH = 'public/css/**/*.css';
@@ -25,7 +25,7 @@ let images_PATH = 'public/images/**/*.{png,jpeg,jpg,svg,gif}';
 
 
 
-//Styles
+//Styles - CSS fyles
 gulp.task('styles', ()=>{                       //command = gulp styles
     console.log('starting styles task!');
     return gulp.src(['public/css/reset.css', css_PATH])         //using arrays to specify files, and the ORDER of them              //take those files in this path
@@ -45,7 +45,7 @@ gulp.task('styles', ()=>{                       //command = gulp styles
 
 
 
-//Scripts
+//Scripts - JS files
 gulp.task('scripts', ()=>{                                  //command = gulp scripts
     console.log('starting scripts task!');
     return gulp.src(scripts_PATH)                  //gulp.src() makes gulp know about files
@@ -86,7 +86,7 @@ gulp.task('images', ()=>{
 
 
 
-//Cleaning
+//Cleaning - deleting
 gulp.task('clean', ()=>{
     console.log('Starting Clean Task');
     return del.sync([
@@ -95,12 +95,20 @@ gulp.task('clean', ()=>{
 });
 
 
-//Default
+//Default - list of commands running only one
 gulp.task('default', gulp.parallel('clean', 'images', 'styles', 'scripts'), (done)=> {       //as default, it's called only with gulp command
     console.log('Starting default task');
     done();
   });
 
+
+//Zip and export
+gulp.task('export', ()=>{
+    console.log('Starting Export Task');
+    return gulp.src('public/**/*')
+                .pipe(zip('website.zip'))
+                .pipe(gulp.dest('./'));
+});
 
 
 //watch = run a gulp task automatically every time a specified file is changed
